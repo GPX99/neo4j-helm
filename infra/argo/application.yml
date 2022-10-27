@@ -1,0 +1,24 @@
+apiVersion: argoproj.io/v1alpha1
+kind: Application
+metadata:
+  name: neo4j
+  namespace: argocd
+spec:
+  project: default
+
+  source:
+    repoURL: https://github.com/GPX99/neo4j-helm.git  # Can point to either a Helm chart repo or a git repo.
+    targetRevision: HEAD  # For Helm, this refers to the chart version.
+    path: infra/charts/neo4j  # This has no meaning for Helm charts pulled directly from a Helm repo instead of git.
+    helm:
+      # Helm values files for overriding values in the helm chart
+      # The path is relative to the spec.source.path directory defined above
+      valueFiles:
+      - staging-values.yaml
+
+      
+  # Destination cluster and namespace to deploy the application
+  destination:
+    server: https://kubernetes.default.svc
+    # The namespace will only be set for namespace-scoped resources that have not set a value for .metadata.namespace
+    namespace: argocd
