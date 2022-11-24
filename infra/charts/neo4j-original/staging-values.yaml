@@ -1,0 +1,35 @@
+# Default values for Neo4j.
+# This is a YAML-formatted file.
+neo4j:
+  name: "de-staging-neo4j"
+  password: "dataengineering"
+  edition: "community"
+  acceptLicenseAgreement: "no"
+  offlineMaintenanceModeEnabled: false
+  resources:
+    cpu: "1000m"
+    memory: "2Gi"
+
+# Volumes for Neo4j
+volumes:
+  data:
+    mode: "defaultStorageClass"
+    defaultStorageClass:
+      accessModes:
+        - ReadWriteOnce
+      requests:
+        storage: 10Gi
+
+# print the neo4j user password set during install to the `helm install` log
+logInitialPassword: false
+
+## Ingress configuration
+## Ref: https://kubernetes.io/docs/concepts/services-networking/ingress/
+##
+ingress:
+  enabled: true
+  hosts:
+    - host: staging-neo4j.moneylion.io
+      path: /
+  sg: sg-0f0a63f8df4fab353
+  certArn: "arn:aws:acm:us-east-1:964458643333:certificate/3efee647-8ad5-48b1-a919-50008b064345"
